@@ -15,7 +15,7 @@ from launch.actions import (
 )
 from launch.event_handlers.on_process_exit import OnProcessExit
 from launch.event_handlers.on_execution_complete import OnExecutionComplete
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration
 
@@ -145,6 +145,11 @@ def generate_launch_description():
     declare_close_loop_odom = DeclareLaunchArgument(
         "close_loop_odom", default_value="false", description=""
     )
+    declare_use_ground_truth_odom = DeclareLaunchArgument(
+        "use_ground_truth_odom",
+        default_value="false",
+        description="Do not start the CHAMP EKF odometry publishers; used only by a simulation ground-truth adapter.",
+    )
 
     description_ld = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
@@ -210,6 +215,7 @@ def generate_launch_description():
             ),
         ],
         remappings=[("odometry/filtered", "odom/local")],
+        condition=UnlessCondition(LaunchConfiguration("use_ground_truth_odom")),
     )
 
     footprint_to_odom_ekf = Node(
@@ -228,6 +234,7 @@ def generate_launch_description():
             ),
         ],
         remappings=[("odometry/filtered", "odom")],
+        condition=UnlessCondition(LaunchConfiguration("use_ground_truth_odom")),
     )
 
     rviz2 = Node(
@@ -263,6 +270,7 @@ def generate_launch_description():
             declare_publish_foot_contacts,
             declare_publish_odom_tf,
             declare_close_loop_odom,
+            declare_use_ground_truth_odom,
             description_ld,
             quadruped_controller_node,
             state_estimator_node,

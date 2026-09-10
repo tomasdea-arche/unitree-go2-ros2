@@ -74,6 +74,11 @@ def generate_launch_description():
     declare_world_init_heading = DeclareLaunchArgument(
         "world_init_heading", default_value="0.0"
     )
+    declare_use_ground_truth_odom = DeclareLaunchArgument(
+        "use_ground_truth_odom",
+        default_value="false",
+        description="Disable CHAMP EKF odometry so an external simulation ground-truth adapter can own /odom and odom TF",
+    )
 
     # Set Gazebo system plugin path for ros2_control
     gz_plugin_path = SetEnvironmentVariable(
@@ -107,6 +112,7 @@ def generate_launch_description():
             "hardware_connected": "false",
             "publish_foot_contacts": "false",
             "close_loop_odom": "true",
+            "use_ground_truth_odom": LaunchConfiguration("use_ground_truth_odom"),
         }.items(),
     )
 
@@ -148,6 +154,7 @@ def generate_launch_description():
             declare_world_init_y,
             declare_world_init_z,
             declare_world_init_heading,
+            declare_use_ground_truth_odom,
             bringup_ld,
             gazebo_ld
 
