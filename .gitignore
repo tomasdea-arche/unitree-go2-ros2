@@ -1,0 +1,28 @@
+# ROS 2 / colcon workspace outputs
+/build/
+/install/
+/log/
+
+# CMake generated files (including accidental in-source builds)
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+
+# Python caches and test artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Editor and operating-system leftovers
+*.swp
+*.swo
+*~
+.DS_Store
